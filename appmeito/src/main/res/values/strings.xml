@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Appmeito</string>
+    <string name="appmeito_data_file">Appmeito_data</string>
+    <string name="appmeito_db_created">appmeito_db_created</string>
+    <string name="appmeito_has_data">appmeito_has_data</string>
+    <string name="appmeito_adid">appmeito_adid</string>
+</resources>
