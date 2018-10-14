@@ -10,18 +10,11 @@ import com.google.gson.JsonObject;
 
 public class logevent {
 
-    public static void generate(Object data, Context context) throws ClassNotFoundException {
+    public static void generate(Object data) {
         Gson gson=new Gson();
         JsonElement jsonElement = gson.toJsonTree(data);
-        JsonObject jsonObject = (JsonObject) jsonElement;
-
-        ids ids=new ids(context);
-
-        dbhelper dbhelper=new dbhelper(context);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add("event",jsonElement);
         dbhelper.insert_data(jsonObject);
-        Log.d("Appmeito",dbhelper.get_data().toString());
-        //dbhelper.drop_table();
-
     }
-
 }
