@@ -1,18 +1,21 @@
 package com.appmeito.android;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.net.InetAddress;
 
 public class AppmeitoServiceForeground extends Service {
     public Context context = this;
@@ -32,11 +35,39 @@ public class AppmeitoServiceForeground extends Service {
         handler = new Handler();
         runnable = new Runnable() {
             public void run() {
+                if(!isStoragePermissionGranted()){
+                    Log.d("Appmeito","Storage Permission not granted");
+                    handler.postDelayed(runnable,30000);
+                    return;
+                }
                 String adid=extra.get_gaid();
                 String android_id=extra.get_android_id();
                 String appid=extra.get_app_id();
                 String app_secret=extra.get_app_secret();
-                JsonArray event_data=dbhelper.get_data();
+
+                if(adid == null){
+                    Log.d("Appmeito","Unable to load GAID");
+                    handler.postDelayed(runnable,30000);
+                    return;
+                }
+
+                if(!extra.get_installation_status()){
+                    JsonObject object=new JsonObject();
+                    JsonObject activity=new JsonObject();
+                    activity.addProperty("timestamp",System.currentTimeMillis());
+                    activity.addProperty("action","install");
+                    object.addProperty("adid",extra.get_gaid());
+                    object.addProperty("macid",extra.get_android_id());
+                    object.addProperty("appid",appid);
+                    object.add("device_info",extra.get_device_info());
+                    object.add("activity",activity);
+                    try {
+                        apihandler.UserInstallation(appid,app_secret,object,context);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+               JsonArray event_data=dbhelper.get_data();
                 if(event_data.size()==0){
                     Log.d("Appmeito","No data to process");
                     handler.postDelayed(runnable, 30000);
@@ -73,6 +104,19 @@ public class AppmeitoServiceForeground extends Service {
         //Code here
         startService(new Intent(context,AppmeitoServiceBackground.class));
         stopSelf();
+    }
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            return true;
+        }
     }
 
 

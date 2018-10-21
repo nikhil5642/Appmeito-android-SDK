@@ -73,6 +73,7 @@ public class extras {
 
     public static JsonObject get_device_info(){
         JsonObject object=new JsonObject();
+
         object.addProperty("brand",Build.BRAND);
         object.addProperty("model",Build.MODEL);
         object.addProperty("platform","android");

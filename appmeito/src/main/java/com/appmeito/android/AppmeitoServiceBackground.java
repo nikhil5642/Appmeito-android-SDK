@@ -1,16 +1,21 @@
 package com.appmeito.android;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+
 
 public class AppmeitoServiceBackground extends Service {
     public Handler handler = null;
@@ -30,6 +35,11 @@ public class AppmeitoServiceBackground extends Service {
         handler = new Handler();
         runnable = new Runnable() {
             public void run() {
+                if(!isStoragePermissionGranted()){
+                    Log.d("Appmeito","Storage Permission not granted");
+                    stopSelf();
+                    return;
+                }
                 String adid = extra.get_gaid();
                 String android_id = extra.get_android_id();
                 String appid = extra.get_app_id();
@@ -66,5 +76,18 @@ public class AppmeitoServiceBackground extends Service {
     @Override
     public void onDestroy() {
         stopSelf();
+    }
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            return true;
+        }
     }
 }

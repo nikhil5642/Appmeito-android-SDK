@@ -4,7 +4,7 @@
     <string name="appmeito_db_created">appmeito_db_created</string>
     <string name="appmeito_has_data">appmeito_has_data</string>
     <string name="appmeito_adid">appmeito_adid</string>
-    <string name="appmeito_installation">appmeito_adid</string>
+    <string name="appmeito_installation">appmeito_installation</string>
     <string name="appmeito_appid">appmeito_appid</string>
     <string name="appmeito_appsecret">appmeito_appsecret</string>
 </resources>

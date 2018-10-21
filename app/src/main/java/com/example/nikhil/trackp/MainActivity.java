@@ -23,19 +23,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbhelper.drop_table();
-        isaccesscoarsePermissionGranted();
+        isStoragePermissionGranted();
          if(isStoragePermissionGranted()){
             appmeito data=new appmeito("main");
             logevent.generate(data);
             }
 
-        try {
-            Appmeito.EventTracker(getString(R.string.app_id),getString(R.string.app_secret),this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        Appmeito.EventTracker(getString(R.string.app_id), getString(R.string.app_secret), this);
         Button button =(Button)findViewById(R.id.check_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,38 +55,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public  boolean isaccesscoarsePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                isaccessfinePermissionGranted();
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            isaccessfinePermissionGranted();
 
-            return true;
-        }
-    }
-    public  boolean isaccessfinePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                isStoragePermissionGranted();
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                return false;
-            }
-        }
-        else {
-            isStoragePermissionGranted();
-//permission is automatically granted on sdk<23 upon installation
-            return true;
-        }
-    }
 }

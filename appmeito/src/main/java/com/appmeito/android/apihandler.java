@@ -21,7 +21,7 @@ import okhttp3.Response;
 public class apihandler{
 
     //private String base_url="http://13.127.189.127";
-    private static String base_url="http://172.25.13.63:5000";
+    private static String base_url="http://data.appmeito.com";
     private static String EventDataUrl=base_url+"/event_data";
     private static String UserInstallationUrl=base_url+"/user_installation";
     private static String UserUninstallationUrl=base_url+"/user_uninstallation";
@@ -90,12 +90,13 @@ public class apihandler{
                     JsonParser jsonParser = new JsonParser();
                     JsonObject obj = jsonParser.parse(response.body().string()).getAsJsonObject();
                     if(obj.get("success").getAsBoolean()==true){
-                        Log.d("Appmeito",obj.get("Appmeito registered").toString());
+                        Log.d("Appmeito","Appmeito registered");
                         extras extra=new extras(context);
                         extra.app_installated();
+                    }else{
+                        Log.d("Appmeito",obj.get("message").toString());
                     }
                 }
-
             }
         });
     }
