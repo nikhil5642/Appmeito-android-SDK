@@ -32,7 +32,7 @@ public class dbhelper {
             object.addProperty("longitude",0);
         }else {
             object.addProperty("lattitude",location.getLatitude());
-            object.addProperty("longitude",location.getLatitude());
+            object.addProperty("longitude",location.getLongitude());
         }
         object.addProperty("code",0);
         String  insert_table="insert into "+table_name+" values("+"'"+object.toString()+"'"+")" ;

@@ -91,9 +91,6 @@ public class GpsService extends Service implements LocationListener {
                     location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     if (location!=null){
 
-                        Log.e("latitude",location.getLatitude()+"");
-                        Log.e("longitude",location.getLongitude()+"");
-
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
                         fn_update(location);
